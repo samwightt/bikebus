@@ -15,10 +15,7 @@ defmodule BikeBusWeb.Graphql.BusTest do
     test "returns an empty array when there are no buses", %{conn: conn} do
       response =
         conn
-        |> post("/graphql", %{
-          "query" => @list_query
-        })
-        |> json_response(200)
+        |> graphql_request(@list_query)
 
       assert response == %{"data" => %{"buses" => []}}
     end
@@ -32,10 +29,7 @@ defmodule BikeBusWeb.Graphql.BusTest do
 
       response =
         conn
-        |> post("/graphql", %{
-          "query" => @list_query
-        })
-        |> json_response(200)
+        |> graphql_request(@list_query)
 
       assert response == %{
                "data" => %{
@@ -70,14 +64,10 @@ defmodule BikeBusWeb.Graphql.BusTest do
     test "creates a bus", %{conn: conn} do
       response =
         conn
-        |> post("/graphql", %{
-          "query" => @create_bus,
-          "variables" => %{
-            "name" => "Testing",
-            "description" => "Testing description"
-          }
+        |> graphql_request(@create_bus, %{
+          "name" => "Testing",
+          "description" => "Testing description"
         })
-        |> json_response(200)
 
       assert %{
                "data" => %{
@@ -91,14 +81,10 @@ defmodule BikeBusWeb.Graphql.BusTest do
     test "persists bus to db", %{conn: conn} do
       response =
         conn
-        |> post("/graphql", %{
-          "query" => @create_bus,
-          "variables" => %{
-            "name" => "Testing",
-            "description" => "Testing description"
-          }
+        |> graphql_request(@create_bus, %{
+          "name" => "Testing",
+          "description" => "Testing description"
         })
-        |> json_response(200)
 
       fetched_bus =
         response
@@ -127,11 +113,7 @@ defmodule BikeBusWeb.Graphql.BusTest do
 
       response =
         conn
-        |> post("/graphql", %{
-          "query" => query,
-          "variables" => %{"id" => bus.id}
-        })
-        |> json_response(200)
+        |> graphql_request(query, %{"id" => bus.id})
 
       assert %{
                "data" => %{
@@ -143,5 +125,14 @@ defmodule BikeBusWeb.Graphql.BusTest do
                }
              } == response
     end
+  end
+
+  defp graphql_request(conn, query, variables \\ %{}) when is_binary(query) and is_struct(conn, Plug.Conn) do
+    conn
+    |> post("/graphql", %{
+      "query" => query,
+      "variables" => variables
+    })
+    |> json_response(200)
   end
 end
