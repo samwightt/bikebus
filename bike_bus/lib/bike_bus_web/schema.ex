@@ -11,6 +11,8 @@ defmodule BikeBusWeb.Schema do
     field :name, non_null(:string)
     @desc "An optional description of the bus. Plain text. Not escaped."
     field :description, :string
+    @desc "The route of the bus. Must be a valid GeoJSON string."
+    field :route, non_null(:string)
   end
 
   query do
@@ -40,6 +42,8 @@ defmodule BikeBusWeb.Schema do
         field :name, non_null(:string)
         @desc "An optional description of the bus. Plain text. Not escaped."
         field :description, :string
+        @desc "The route of the bus. Must be a valid GeoJSON string."
+        field :route, non_null(:string)
       end
 
       output do

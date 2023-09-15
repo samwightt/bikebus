@@ -20,12 +20,18 @@ defmodule BikeBus.TrackerTest do
       assert Tracker.get_bus!(bus.id) == bus
     end
 
-    test "create_bus/1 with valid data creates a bus" do
-      valid_attrs = %{name: "some name", description: "some description"}
-
+    test "create_bus/1 with valid data creates route" do
+      route = "{some_route: true}"
+      valid_attrs = %{name: "some name", description: "some description", route: route}
       assert {:ok, %Bus{} = bus} = Tracker.create_bus(valid_attrs)
       assert bus.name == "some name"
       assert bus.description == "some description"
+      assert bus.route == route
+    end
+
+    test "create_bus/1 requires route" do
+      valid_attrs = %{name: "some name", description: "some description"}
+      assert {:error, %Ecto.Changeset{}} = Tracker.create_bus(valid_attrs)
     end
 
     test "create_bus/1 with invalid data returns error changeset" do

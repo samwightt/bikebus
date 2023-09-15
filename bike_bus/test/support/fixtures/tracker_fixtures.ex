@@ -12,7 +12,8 @@ defmodule BikeBus.TrackerFixtures do
       attrs
       |> Enum.into(%{
         name: "some name",
-        description: "some description"
+        description: "some description",
+        route: "{some_route: true}"
       })
       |> BikeBus.Tracker.create_bus()
 

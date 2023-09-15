@@ -8,9 +8,11 @@ defmodule BikeBusWeb.Graphql.BusTest do
         id
         name
         description
+        route
       }
     }
     """
+    @route "{\"some_route\": true}"
 
     test "returns an empty array when there are no buses", %{conn: conn} do
       response =
@@ -24,7 +26,8 @@ defmodule BikeBusWeb.Graphql.BusTest do
       {:ok, bus} =
         BikeBus.Tracker.create_bus(%{
           name: "Testing",
-          description: "Testing description"
+          description: "Testing description",
+          route: @route
         })
 
       response =
@@ -37,7 +40,8 @@ defmodule BikeBusWeb.Graphql.BusTest do
                    %{
                      "id" => bus.id,
                      "name" => bus.name,
-                     "description" => bus.description
+                     "description" => bus.description,
+                     "route" => @route
                    }
                  ]
                }
@@ -47,10 +51,11 @@ defmodule BikeBusWeb.Graphql.BusTest do
 
   describe "bus creation" do
     @create_bus """
-    mutation($name: String!, $description: String) {
+    mutation($name: String!, $description: String, $route: String!) {
       createBus(input: {
         name: $name,
-        description: $description
+        description: $description,
+        route: $route
       }) {
         bus {
           id
@@ -61,12 +66,16 @@ defmodule BikeBusWeb.Graphql.BusTest do
     }
     """
 
+    @route "{\"some_route\": true}"
+
     test "creates a bus", %{conn: conn} do
+
       response =
         conn
         |> graphql_request(@create_bus, %{
           "name" => "Testing",
-          "description" => "Testing description"
+          "description" => "Testing description",
+          route: @route
         })
 
       assert %{
@@ -83,7 +92,8 @@ defmodule BikeBusWeb.Graphql.BusTest do
         conn
         |> graphql_request(@create_bus, %{
           "name" => "Testing",
-          "description" => "Testing description"
+          "description" => "Testing description",
+          "route" => @route
         })
 
       fetched_bus =
@@ -98,8 +108,9 @@ defmodule BikeBusWeb.Graphql.BusTest do
 
   describe "getting a bus" do
     test "gets a bus stored in the db", %{conn: conn} do
+      route = "{some_route: true}"
       {:ok, bus} =
-        BikeBus.Tracker.create_bus(%{name: "Testing", description: "Testing description"})
+        BikeBus.Tracker.create_bus(%{name: "Testing", description: "Testing description", route: route})
 
       query = """
         query($id: ID!) {
@@ -107,6 +118,7 @@ defmodule BikeBusWeb.Graphql.BusTest do
             id
             name
             description
+            route
           }
         }
       """
@@ -120,7 +132,8 @@ defmodule BikeBusWeb.Graphql.BusTest do
                  "bus" => %{
                    "id" => bus.id,
                    "name" => "Testing",
-                   "description" => "Testing description"
+                   "description" => "Testing description",
+                   "route" => route
                  }
                }
              } == response
