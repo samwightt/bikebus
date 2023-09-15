@@ -5,8 +5,12 @@ defmodule BikeBusWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", BikeBusWeb do
+  scope "/" do
     pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: BikeBusWeb.Schema, interface: :playground
+
+    forward "/graphql", Absinthe.Plug, schema: BikeBusWeb.Schema
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
