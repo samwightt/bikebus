@@ -109,4 +109,39 @@ defmodule BikeBusWeb.Graphql.BusTest do
       assert fetched_bus.description == "Testing description"
     end
   end
+
+  describe "getting a bus" do
+    test "gets a bus stored in the db", %{conn: conn} do
+      {:ok, bus} =
+        BikeBus.Tracker.create_bus(%{name: "Testing", description: "Testing description"})
+
+      query = """
+        query($id: ID!) {
+          bus(id: $id) {
+            id
+            name
+            description
+          }
+        }
+      """
+
+      response =
+        conn
+        |> post("/graphql", %{
+          "query" => query,
+          "variables" => %{"id" => bus.id}
+        })
+        |> json_response(200)
+
+      assert %{
+               "data" => %{
+                 "bus" => %{
+                   "id" => bus.id,
+                   "name" => "Testing",
+                   "description" => "Testing description"
+                 }
+               }
+             } == response
+    end
+  end
 end

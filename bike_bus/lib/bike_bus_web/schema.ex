@@ -20,6 +20,14 @@ defmodule BikeBusWeb.Schema do
         {:ok, BikeBus.Tracker.list_buses()}
       end)
     end
+
+    field :bus, :bus do
+      arg(:id, non_null(:id))
+
+      resolve(fn _parent, args, _ ->
+        {:ok, BikeBus.Tracker.get_bus!(args.id)}
+      end)
+    end
   end
 
   mutation do
