@@ -49,7 +49,9 @@ defmodule BikeBus.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:absinthe, "~> 1.7"},
       {:absinthe_plug, "~> 1.5"},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:absinthe_relay, "~> 1.5.2"},
+      {:brex_result, "~> 0.4.0"}
     ]
   end
 
