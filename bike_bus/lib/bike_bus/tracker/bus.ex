@@ -15,6 +15,6 @@ defmodule BikeBus.Tracker.Bus do
   def changeset(bus, attrs) do
     bus
     |> cast(attrs, [:name, :description])
-    |> validate_required([:name, :description])
+    |> validate_required([:name])
   end
 end
