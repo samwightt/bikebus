@@ -21,7 +21,9 @@ defmodule BikeBusWeb.Schema do
       end)
     end
 
+    @desc "Gets a single bus with the given the id."
     field :bus, :bus do
+      @desc "The id of the bus to get. Must be a UUID."
       arg(:id, non_null(:id))
 
       resolve(fn _parent, args, _ ->
@@ -31,13 +33,17 @@ defmodule BikeBusWeb.Schema do
   end
 
   mutation do
+    @desc "Creates a new bike bus."
     payload field :create_bus do
       input do
+        @desc "The name of the bus."
         field :name, non_null(:string)
+        @desc "An optional description of the bus. Plain text. Not escaped."
         field :description, :string
       end
 
       output do
+        @desc "The created bus."
         field :bus, non_null(:bus)
       end
 
