@@ -206,6 +206,29 @@ defmodule BikeBusWeb.Graphql.BusTest do
       response = graphql_request(conn, @query, %{"id" => bus.id})
       assert response == %{"data" => %{"bus" => %{"location" => %{"latitude" => 1.0, "longitude" => 2.0}}}}
     end
+
+    test "can be deleted via a mutation", %{conn: conn} do
+      {:ok, bus} = BikeBus.Tracker.create_bus(%{name: "Testing", description: "Testing description", route: "{some_route: true}", location: %{latitude: 1.0, longitude: 2.0}})
+      mutation = """
+      mutation ($id: ID!) {
+        clearLocation(input: { busId: $id }) {
+          bus {
+            id
+          }
+        }
+      }
+      """
+
+      input_vars = %{
+        "id" => bus.id
+      }
+
+      response = graphql_request(conn, mutation, input_vars)
+      assert response == %{"data" => %{"clearLocation" => %{"bus" => %{"id" => bus.id}}}}
+
+      response = graphql_request(conn, @query, %{"id" => bus.id})
+      assert response == %{"data" => %{"bus" => %{"location" => nil}}}
+    end
   end
 
   defp graphql_request(conn, query, variables \\ %{}) when is_binary(query) and is_struct(conn, Plug.Conn) do

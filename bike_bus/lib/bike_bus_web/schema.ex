@@ -98,5 +98,22 @@ defmodule BikeBusWeb.Schema do
         |> fmap(fn bus -> %{bus: bus} end)
       end)
     end
+
+    payload field :clear_location do
+      input do
+        field :bus_id, non_null(:id)
+      end
+
+      output do
+        field :bus, non_null(:bus)
+      end
+
+      resolve(fn %{bus_id: bus_id}, _ ->
+        bus_id
+        |> BikeBus.Tracker.get_bus!()
+        |> BikeBus.Tracker.update_bus(%{location: nil})
+        |> fmap(fn bus -> %{bus: bus} end)
+      end)
+    end
   end
 end
