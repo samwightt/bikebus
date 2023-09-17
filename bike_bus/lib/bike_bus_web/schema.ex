@@ -3,6 +3,11 @@ defmodule BikeBusWeb.Schema do
   use Absinthe.Relay.Schema, :modern
   import Brex.Result.Base
 
+  object :location do
+    field :latitude, non_null(:float)
+    field :longitude, non_null(:float)
+  end
+
   @desc "A bike bus that people can track on the map."
   object :bus do
     @desc "The id of the bus."
@@ -13,6 +18,16 @@ defmodule BikeBusWeb.Schema do
     field :description, :string
     @desc "The route of the bus. Must be a valid GeoJSON string."
     field :route, non_null(:string)
+
+    field :location, :location do
+      resolve(fn parent, _, _ ->
+        if parent.location do
+          {:ok, %{latitude: parent.location["latitude"], longitude: parent.location["longitude"]}}
+        else
+          {:ok, nil}
+        end
+      end)
+    end
   end
 
   query do
@@ -62,6 +77,25 @@ defmodule BikeBusWeb.Schema do
           |> BikeBus.Tracker.create_bus()
           |> fmap(fn bus -> %{bus: bus} end)
         end
+      end)
+    end
+
+    payload field :update_location do
+      input do
+        field :bus_id, non_null(:id)
+        field :latitude, non_null(:float)
+        field :longitude, non_null(:float)
+      end
+
+      output do
+        field :bus, non_null(:bus)
+      end
+
+      resolve(fn %{bus_id: bus_id, latitude: latitude, longitude: longitude}, _ ->
+        bus_id
+        |> BikeBus.Tracker.get_bus!()
+        |> BikeBus.Tracker.update_bus(%{location: %{latitude: latitude, longitude: longitude}})
+        |> fmap(fn bus -> %{bus: bus} end)
       end)
     end
   end

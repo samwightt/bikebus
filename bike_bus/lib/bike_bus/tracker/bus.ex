@@ -8,6 +8,7 @@ defmodule BikeBus.Tracker.Bus do
     field :name, :string
     field :description, :string
     field :route, :string
+    field :location, :map
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule BikeBus.Tracker.Bus do
   @doc false
   def changeset(bus, attrs) do
     bus
-    |> cast(attrs, [:name, :description, :route])
+    |> cast(attrs, [:name, :description, :route, :location])
     |> validate_required([:name, :route])
   end
 end

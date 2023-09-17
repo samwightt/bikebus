@@ -163,8 +163,50 @@ defmodule BikeBusWeb.Graphql.BusTest do
     end
   end
 
-  # TODO: Require 'password' for creation
-  # TODO: Add deletion.
+  describe "current bus location" do
+    @query """
+    query($id: ID!) {
+      bus(id: $id) {
+        location {
+          latitude
+          longitude
+        }
+      }
+    }
+    """
+
+    test "is nil by default", %{conn: conn} do
+      {:ok, bus} = BikeBus.Tracker.create_bus(%{name: "Testing", description: "Testing description", route: "{some_route: true}"})
+      response = graphql_request(conn, @query, %{"id" => bus.id})
+      assert response == %{"data" => %{"bus" => %{"location" => nil}}}
+    end
+
+    test "can be set via mutation", %{conn: conn} do
+      {:ok, bus} = BikeBus.Tracker.create_bus(%{name: "Testing", description: "Testing description", route: "{some_route: true}"})
+      mutation = """
+      mutation ($id: ID!, $latitude: Float!, $longitude: Float!) {
+        updateLocation(input: { busId: $id, latitude: $latitude, longitude: $longitude }) {
+          bus {
+            id
+          }
+        }
+      }
+      """
+
+      input_vars = %{
+        "id" => bus.id,
+        "latitude" => 1.0,
+        "longitude" => 2.0
+      }
+
+      response = graphql_request(conn, mutation, input_vars)
+
+      assert response == %{"data" => %{"updateLocation" => %{"bus" => %{"id" => bus.id}}}}
+
+      response = graphql_request(conn, @query, %{"id" => bus.id})
+      assert response == %{"data" => %{"bus" => %{"location" => %{"latitude" => 1.0, "longitude" => 2.0}}}}
+    end
+  end
 
   defp graphql_request(conn, query, variables \\ %{}) when is_binary(query) and is_struct(conn, Plug.Conn) do
     conn
