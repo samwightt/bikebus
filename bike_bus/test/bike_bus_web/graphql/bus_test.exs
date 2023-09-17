@@ -51,11 +51,12 @@ defmodule BikeBusWeb.Graphql.BusTest do
 
   describe "bus creation" do
     @create_bus """
-    mutation($name: String!, $description: String, $route: String!) {
+    mutation($name: String!, $description: String, $route: String!, $password: String!) {
       createBus(input: {
         name: $name,
         description: $description,
-        route: $route
+        route: $route,
+        password: $password
       }) {
         bus {
           id
@@ -67,15 +68,20 @@ defmodule BikeBusWeb.Graphql.BusTest do
     """
 
     @route "{\"some_route\": true}"
+    @password "password"
+
+    setup do
+      Application.put_env(:bike_bus, :creation_password, @password)
+    end
 
     test "creates a bus", %{conn: conn} do
-
       response =
         conn
         |> graphql_request(@create_bus, %{
           "name" => "Testing",
           "description" => "Testing description",
-          route: @route
+          "route" => @route,
+          "password" => @password
         })
 
       assert %{
@@ -93,7 +99,8 @@ defmodule BikeBusWeb.Graphql.BusTest do
         |> graphql_request(@create_bus, %{
           "name" => "Testing",
           "description" => "Testing description",
-          "route" => @route
+          "route" => @route,
+          "password" => @password
         })
 
       fetched_bus =
@@ -103,6 +110,22 @@ defmodule BikeBusWeb.Graphql.BusTest do
 
       assert fetched_bus.name == "Testing"
       assert fetched_bus.description == "Testing description"
+    end
+
+    test "requires valid password", %{conn: conn} do
+      response =
+        conn
+        |> graphql_request(@create_bus, %{
+          "name" => "Testing",
+          "description" => "Testing description",
+          "route" => @route,
+          "password" => "Not the password"
+        })
+
+      assert response = %{
+        "errors" => [
+        ]
+      }
     end
   end
 
@@ -139,6 +162,9 @@ defmodule BikeBusWeb.Graphql.BusTest do
              } == response
     end
   end
+
+  # TODO: Require 'password' for creation
+  # TODO: Add deletion.
 
   defp graphql_request(conn, query, variables \\ %{}) when is_binary(query) and is_struct(conn, Plug.Conn) do
     conn
