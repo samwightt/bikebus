@@ -17,7 +17,8 @@ defmodule BikeBus.Application do
       # Start Finch
       {Finch, name: BikeBus.Finch},
       # Start the Endpoint (http/https)
-      BikeBusWeb.Endpoint
+      BikeBusWeb.Endpoint,
+      {Absinthe.Subscription, BikeBusWeb.Endpoint}
       # Start a worker by calling: BikeBus.Worker.start_link(arg)
       # {BikeBus.Worker, arg}
     ]

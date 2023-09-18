@@ -22,7 +22,7 @@ defmodule BikeBusWeb.Schema do
     field :location, :location do
       resolve(fn parent, _, _ ->
         if parent.location do
-          {:ok, %{latitude: parent.location["latitude"], longitude: parent.location["longitude"]}}
+          {:ok, %{latitude: parent.location.latitude, longitude: parent.location.longitude}}
         else
           {:ok, nil}
         end
@@ -114,6 +114,24 @@ defmodule BikeBusWeb.Schema do
         |> BikeBus.Tracker.update_bus(%{location: nil})
         |> fmap(fn bus -> %{bus: bus} end)
       end)
+    end
+  end
+
+  subscription do
+    field :bus_updated, :bus do
+      arg :bus_id, non_null(:id)
+
+      config fn args, _ ->
+        {:ok, topic: args.bus_id}
+      end
+
+      trigger :update_location, topic: fn doc ->
+        doc.bus.id
+      end
+
+      resolve fn doc, _, _ ->
+        {:ok, doc.bus}
+      end
     end
   end
 end
