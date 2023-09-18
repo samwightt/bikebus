@@ -1,0 +1,8 @@
+query RootQuery {
+	buses {
+		id
+		name
+		description
+		route
+	}
+}

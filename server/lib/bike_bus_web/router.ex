@@ -3,6 +3,7 @@ defmodule BikeBusWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug, origin: [~r/.*/], methods: ["GET", "POST"]
   end
 
   scope "/" do

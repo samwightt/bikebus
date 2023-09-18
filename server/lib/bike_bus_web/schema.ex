@@ -22,7 +22,8 @@ defmodule BikeBusWeb.Schema do
     field :location, :location do
       resolve(fn parent, _, _ ->
         if parent.location do
-          {:ok, %{latitude: parent.location.latitude, longitude: parent.location.longitude}}
+          location = for {key, val} <- parent.location, into: %{}, do: {if is_binary(key) do String.to_atom(key) else key end, val}
+          {:ok, %{latitude: location.latitude, longitude: location.longitude}}
         else
           {:ok, nil}
         end
@@ -32,7 +33,7 @@ defmodule BikeBusWeb.Schema do
 
   query do
     @desc "A list of all of the buses."
-    field :buses, list_of(:bus) do
+    field :buses, non_null(list_of(non_null(:bus))) do
       resolve(fn _parent, _args, _resolution ->
         {:ok, BikeBus.Tracker.list_buses()}
       end)

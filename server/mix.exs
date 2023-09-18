@@ -53,7 +53,8 @@ defmodule BikeBus.MixProject do
       {:absinthe_relay, "~> 1.5.2"},
       {:brex_result, "~> 0.4.0"},
       {:absinthe_phoenix, "~> 2.0"},
-      {:absinthe_graphql_ws, "~> 0.3.6"}
+      {:absinthe_graphql_ws, "~> 0.3.6"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 
