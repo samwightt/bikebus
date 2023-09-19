@@ -10,7 +10,6 @@ defmodule BikeBusWeb.Router do
     pipe_through :api
 
     forward "/graphql", Absinthe.Plug, schema: BikeBusWeb.Schema
-    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: BikeBusWeb.Schema, interface: :playground, socket: BikeBusWeb.GraphQLSocket
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

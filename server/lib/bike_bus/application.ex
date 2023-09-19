@@ -19,8 +19,6 @@ defmodule BikeBus.Application do
       # Start the Endpoint (http/https)
       BikeBusWeb.Endpoint,
       {Absinthe.Subscription, BikeBusWeb.Endpoint}
-      # Start a worker by calling: BikeBus.Worker.start_link(arg)
-      # {BikeBus.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
