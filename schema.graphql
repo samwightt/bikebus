@@ -1,0 +1,88 @@
+schema {
+  subscription: RootSubscriptionType
+  mutation: RootMutationType
+  query: RootQueryType
+}
+
+type Location {
+  latitude: Float!
+  longitude: Float!
+}
+
+"A bike bus that people can track on the map."
+type Bus {
+  "The id of the bus."
+  id: ID
+
+  "The name of the bus."
+  name: String!
+
+  "An optional description of the bus. Plain text. Not escaped."
+  description: String
+
+  "The route of the bus. Must be a valid GeoJSON string."
+  route: String!
+
+  location: Location
+}
+
+type RootQueryType {
+  "A list of all of the buses."
+  buses: [Bus!]!
+
+  "Gets a single bus with the given the id."
+  bus(
+    "The id of the bus to get. Must be a UUID."
+    id: ID!
+  ): Bus
+}
+
+input CreateBusInput {
+  "The name of the bus."
+  name: String!
+
+  "An optional description of the bus. Plain text. Not escaped."
+  description: String
+
+  "The route of the bus. Must be a valid GeoJSON string."
+  route: String!
+
+  "The password required to create a bus."
+  password: String!
+}
+
+type CreateBusPayload {
+  "The created bus."
+  bus: Bus!
+}
+
+input UpdateLocationInput {
+  busId: ID!
+  latitude: Float!
+  longitude: Float!
+}
+
+type UpdateLocationPayload {
+  bus: Bus!
+}
+
+input ClearLocationInput {
+  busId: ID!
+}
+
+type ClearLocationPayload {
+  bus: Bus!
+}
+
+type RootMutationType {
+  "Creates a new bike bus."
+  createBus(input: CreateBusInput!): CreateBusPayload
+
+  updateLocation(input: UpdateLocationInput!): UpdateLocationPayload
+
+  clearLocation(input: ClearLocationInput!): ClearLocationPayload
+}
+
+type RootSubscriptionType {
+  busUpdated(busId: ID!): Bus
+}
