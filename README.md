@@ -40,6 +40,28 @@ pnpm install
 pnpm dev
 ```
 
+## Environment variables
+
+The following environment variables are available for configuration:
+
+### Frontend
+
+These environment variables are static, meaning they are included at build time. **Changes to these environment variables require rebuilding the frontend or the frontend container**.
+
+- `PUBLIC_API_SERVER_URL` - The URL base of the API server. Must include the protocol. In development, this is `http://localhost:4000`. If a path is included in this URL, the frontend will append `/graphql` to it.
+
+## Backend
+
+These environment variables are configured at runtime and do *not* require recompiling the app or the app's container. See `server/config/release.exs` for further documentation:
+
+- `MIX_ENV` - This should be set to `prod` in production.
+- `DATABASE_URL` - The `postgresql://` [connection URL](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING-URIS) for the Postgres database.
+- `PHX_HOST` - The host of the app. In development this is `localhost`
+- `PORT` - The port to run the server on.
+- `SECRET_KEY_BASE` - The key used to sign and encrypt cookies + other secrets. Generate this with `mix phx.gen.secret`, or use a sufficiently long key.
+- `ECTO_IPV6` - Set to `true` or `1` for Postgres databases that require IPV6 for connection.
+- `POOL_SIZE` - The size of the DB connection pool. `10` by default.
+
 ## Stack
 
 The backend is written in Elixir and the frontend is written in Svelte with SvelteKit. The two communicate using GraphQL. The backend runs a GraphQL server built with Absinthe that uses Phoenix channels for subscriptions. The frontend uses Houdini to request and display content from the backend. The SvelteKit app is compiled in SPA mode as we don't need SSR or prerendering.
