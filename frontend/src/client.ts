@@ -1,12 +1,19 @@
 import { HoudiniClient } from '$houdini';
 import { subscription } from '$houdini/plugins'
 import { createClient } from 'graphql-ws'
+import { PUBLIC_API_SERVER_URL } from '$env/static/public'
+
+const GRAPHQL_URL = new URL('graphql', PUBLIC_API_SERVER_URL).href
+
+const subscriptionBase = new URL('graphql/subscriptions', PUBLIC_API_SERVER_URL)
+subscriptionBase.protocol = 'ws'
+const SUBSCRIPTION_URL = subscriptionBase.href
 
 export default new HoudiniClient({
-    url: 'http://localhost:4000/graphql',
+    url: GRAPHQL_URL,
     plugins: [
         subscription(() => createClient({
-            url: 'ws://localhost:4000/graphql/subscriptions'
+            url: SUBSCRIPTION_URL
         }))
     ]
 
