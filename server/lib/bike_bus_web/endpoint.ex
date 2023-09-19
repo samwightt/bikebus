@@ -16,6 +16,7 @@ defmodule BikeBusWeb.Endpoint do
   socket "/socket", BikeBusWeb.GraphQLSocket,
       websocket: true,
       longpoll: false
+  socket "/graphql/subscriptions", BikeBusWeb.GraphqlWsSocket, websocket: [path: "", subprotocols: ["graphql-transport-ws"]]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
