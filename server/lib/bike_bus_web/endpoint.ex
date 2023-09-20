@@ -13,7 +13,7 @@ defmodule BikeBusWeb.Endpoint do
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
-  socket "/graphql/subscriptions", BikeBusWeb.GraphqlWsSocket, websocket: [path: "", subprotocols: ["graphql-transport-ws"]]
+  socket "/graphql/subscriptions", BikeBusWeb.GraphqlWsSocket, websocket: [path: "", subprotocols: ["graphql-transport-ws"], check_origin: false]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
