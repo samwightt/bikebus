@@ -18,10 +18,12 @@
 
 <div class="my-4">
 	<h2 class="text-3xl font-semibold mb-3 flex flex-row items-center gap-4">
-		{$data.name}
-		{#if $data.location}
-			<span class="text-white bg-red-500 rounded-md px-2 py-1 font-semibold text-sm inline-block">LIVE</span>
-		{/if}
+		<a href={`/bus/${$data.id}`}>
+			{$data.name}
+			{#if $data.location}
+				<span class="text-white bg-red-500 rounded-md px-2 py-1 font-semibold text-sm inline-block">LIVE</span>
+			{/if}
+		</a>
 	</h2>
 	{#if $data.description}
 		<p class="">{$data.description}</p>

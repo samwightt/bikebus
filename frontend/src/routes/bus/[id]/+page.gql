@@ -1,0 +1,11 @@
+query BusInfo($id: ID!) {
+	bus(id: $id) {
+		id
+		name
+		description
+		location {
+			latitude
+			longitude
+		}
+	}
+}
