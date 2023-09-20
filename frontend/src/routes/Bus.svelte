@@ -7,33 +7,23 @@
 		fragment BusHomeDetails on Bus {
 			id
 			name
+			description
 			location {
 				latitude
 				longitude
 			}
 		}
 	`))
-
-	const updates = graphql(`
-		subscription BusUpdates($busId: ID!) {
-			busUpdated(busId: $busId) {
-				id
-				name
-				location {
-					latitude
-					longitude
-				}
-			}
-		}
-	`)
-
-	$: updates.listen({ busId: $data.id! })
-	$: location = $updates.data?.busUpdated?.location || $data.location
 </script>
 
-<h2>{$data.name}</h2>
-
-{#if location}
-	<p>Latitude: {location.latitude}</p>
-	<p>Longitude: {location.longitude}</p>
-{/if}
+<div class="my-4">
+	<h2 class="text-3xl font-semibold mb-3 flex flex-row items-center gap-4">
+		{$data.name}
+		{#if $data.location}
+			<span class="text-white bg-red-500 rounded-md px-2 py-1 font-semibold text-sm inline-block">LIVE</span>
+		{/if}
+	</h2>
+	{#if $data.description}
+		<p class="">{$data.description}</p>
+	{/if}
+</div>

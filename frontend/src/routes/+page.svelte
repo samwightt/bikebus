@@ -8,8 +8,11 @@
 	$: buses = $RootQuery.data?.buses
 </script>
 
-<h1>Welcome to SvelteKit</h1>
+<div class="mb-10">
+<h1 class="text-5xl font-bold mb-8">BikeB.us</h1>
+<p>This is a site for tracking bike buses. Click one of the buses below to track it.</p>
+</div>
+
 {#each buses || [] as bus }
 	<Bus bus={bus} />
 {/each}
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
