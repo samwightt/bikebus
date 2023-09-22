@@ -1,0 +1,8 @@
+query TrackBusInfo($id: ID!) {
+	bus(id: $id) {
+		id
+		name
+		description
+		route
+	}
+}
