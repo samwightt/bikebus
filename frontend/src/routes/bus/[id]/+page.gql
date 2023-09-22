@@ -3,6 +3,7 @@ query BusInfo($id: ID!) {
 		id
 		name
 		description
+		route
 		location {
 			latitude
 			longitude
