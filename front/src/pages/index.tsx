@@ -1,4 +1,5 @@
 import { useQuery, gql } from 'urql'
+import { Link } from '@/router'
 
 const BusQuery = gql`
   query {
@@ -21,7 +22,11 @@ export default function Home() {
   return (
     <div>
       <h1>Buses</h1>
-      {result.data.buses.map((bus: any) => (<p key={bus.id}>{bus.name}</p>))}
+      {result.data.buses.map((bus: any) => (
+        <Link to="/bus/:id" params={{ id: bus.id }}>
+          <p key={bus.id}>{bus.name}</p>
+        </Link>
+      ))}
     </div>
   )
 }
