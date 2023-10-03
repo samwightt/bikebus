@@ -5,13 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@generouted/react-router": "^1.15.9",
+    "graphql-ws": "^5.14.1",
     "preact": "^10.16.0",
-    "react-router-dom": "^6.16.0"
+    "react-router-dom": "^6.16.0",
+    "urql": "^4.0.5"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
