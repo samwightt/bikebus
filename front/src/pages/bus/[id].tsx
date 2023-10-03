@@ -27,7 +27,11 @@ function Route(props: { route?: string }) {
   const { current: map } = useMap();
   const parsedJson = useMemo(() => {
     if (props.route) {
-      return JSON.parse(props.route);
+      try {
+        return JSON.parse(props.route);
+      } catch (e) {
+        return null;
+      }
     }
     return null;
   }, [props.route]);
@@ -82,7 +86,11 @@ export default function () {
 
   const parsedJson = useMemo(() => {
     if (result.data?.bus?.route) {
-      return JSON.parse(result.data.bus.route);
+      try {
+        return JSON.parse(result.data.bus.route);
+      } catch (e) {
+        return null;
+      }
     }
     return null;
   }, [result.data.bus.route]);
