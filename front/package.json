@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "codegen": "graphql-codegen"
   },
   "dependencies": {
     "@generouted/react-router": "^1.15.9",
@@ -16,9 +17,15 @@
     "urql": "^4.0.5"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/import-types-preset": "^3.0.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@preact/preset-vite": "^2.5.0",
-    "typescript": "^5.0.2",
+    "graphql": "^16.8.1",
+    "typescript": "^5.2.2",
     "vite": "^4.4.5",
+    "vite-plugin-graphql-codegen": "^3.3.1",
     "vite-tsconfig-paths": "^4.2.1"
   }
 }

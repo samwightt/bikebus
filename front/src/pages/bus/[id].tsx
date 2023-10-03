@@ -1,8 +1,9 @@
 import { client } from '@/lib/urql'
 import { Params, useParams } from '@/router'
-import { gql, useQuery } from 'urql'
+import { graphql } from '@/gql/gql'
+import { useQuery } from 'urql'
 
-const ShowBus = gql`
+const ShowBus = graphql(`
   query ShowBus($id: ID!) {
     bus(id: $id) {
       id
@@ -10,7 +11,7 @@ const ShowBus = gql`
       description
     }
   }
-`
+`)
 
 export const Loader = ({ params }: { params: Params['/bus/:id'] }) => {
   console.log("LOADING")
@@ -23,11 +24,11 @@ export default function () {
   const [result] = useQuery({
     query: ShowBus,
     variables: {
-      id: id
+      id
     }
   })
 
-  if (result.fetching) {
+  if (result.fetching || !result?.data?.bus) {
     return <h1>Loading...</h1>
   }
 
