@@ -1,5 +1,7 @@
+import { Routes } from '@generouted/react-router/lazy'
+
 export function App() {
   return (
-    <h1>Hello Vite + Preact</h1>
+    <Routes />
   )
 }
