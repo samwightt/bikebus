@@ -12,7 +12,9 @@
   "dependencies": {
     "@generouted/react-router": "^1.15.9",
     "graphql-ws": "^5.14.1",
+    "maplibre-gl": "^3.3.1",
     "preact": "^10.16.0",
+    "react-map-gl": "^7.1.6",
     "react-router-dom": "^6.16.0",
     "urql": "^4.0.5"
   },
