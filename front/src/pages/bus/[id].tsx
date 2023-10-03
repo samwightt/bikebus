@@ -1,5 +1,5 @@
 import { client } from '@/lib/urql'
-import { Params, useParams } from '@/router'
+import { Link, Params, useParams } from '@/router'
 import { graphql } from '@/gql/gql'
 import { useQuery } from 'urql'
 
@@ -33,7 +33,8 @@ export default function () {
   }
 
   return <div>
-    <h1>{result.data.bus.name}</h1>
+    <p class="text-2xl mb-4"><Link to="/">Bike Bus</Link></p>
+    <h1 class="text-4xl font-bold mb-8">{result.data.bus.name}</h1>
     <p>{result.data.bus.description}</p>
   </div>
 }

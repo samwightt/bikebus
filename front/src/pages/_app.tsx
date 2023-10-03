@@ -1,12 +1,12 @@
 import { Provider } from "@/lib/urql";
 import { Outlet } from 'react-router-dom'
-import { Suspense } from 'preact/compat'
 
 export default function App() {
   return <Provider>
-    <h1>Bike Bus</h1>
-    <Suspense fallback={<h1>Loading...</h1>}>
-      <Outlet />
-    </Suspense>
+    <div class="min-h-screen bg-base-100">
+      <div class="container mx-auto max-w-5xl px-4 py-8">
+        <Outlet />
+      </div>
+    </div>
   </Provider>
 }
