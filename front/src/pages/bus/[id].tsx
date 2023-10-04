@@ -2,8 +2,8 @@ import { client } from "@/lib/urql";
 import { Link, Params, useParams } from "@/router";
 import { graphql } from "@/gql/gql";
 import { useQuery } from "urql";
-import { useEffect, useMemo } from "preact/hooks";
-import Map, { Layer, Source, useMap } from "react-map-gl/maplibre";
+import { useMemo } from "preact/hooks";
+import Map, { Layer, Source } from "react-map-gl/maplibre";
 import { LngLatBounds } from "maplibre-gl";
 
 const ShowBus = graphql(`
@@ -18,13 +18,11 @@ const ShowBus = graphql(`
 `);
 
 export const Loader = ({ params }: { params: Params["/bus/:id"] }) => {
-  console.log("LOADING");
   const { id } = params;
   return client.query(ShowBus, { id }).toPromise;
 };
 
 function Route(props: { route?: string }) {
-  const { current: map } = useMap();
   const parsedJson = useMemo(() => {
     if (props.route) {
       try {
@@ -35,24 +33,6 @@ function Route(props: { route?: string }) {
     }
     return null;
   }, [props.route]);
-
-  const coordinates = parsedJson && parsedJson.features[0].geometry.coordinates;
-
-  const bounds = useMemo(() => {
-    if (coordinates) {
-      const latlngbound = new LngLatBounds({
-        lat: coordinates[0][0],
-        lng: coordinates[0][1],
-      });
-      for (let coordinate of coordinates) {
-        latlngbound.extend(coordinate);
-      }
-      return latlngbound;
-    }
-    return null;
-  }, [coordinates]);
-
-  console.log(bounds, map);
 
   return (
     <Source type="geojson" data={parsedJson}>
@@ -71,29 +51,29 @@ function Route(props: { route?: string }) {
   );
 }
 
-export default function () {
+export default function ShowBusPage() {
   const { id } = useParams("/bus/:id");
-  const [result] = useQuery({
+  const [{ data, fetching }] = useQuery({
     query: ShowBus,
     variables: {
       id,
     },
   });
 
-  if (result.fetching || !result?.data?.bus) {
+  if (fetching || !data?.bus) {
     return <h1>Loading...</h1>;
   }
 
   const parsedJson = useMemo(() => {
-    if (result.data?.bus?.route) {
+    if (data.bus?.route) {
       try {
-        return JSON.parse(result.data.bus.route);
+        return JSON.parse(data.bus.route);
       } catch (e) {
         return null;
       }
     }
     return null;
-  }, [result.data.bus.route]);
+  }, [data.bus.route]);
 
   const coordinates = parsedJson && parsedJson.features[0].geometry.coordinates;
 
@@ -115,8 +95,8 @@ export default function () {
       <p class="text-2xl mb-4">
         <Link to="/">Bike Bus</Link>
       </p>
-      <h1 class="text-4xl font-bold mb-8">{result.data.bus.name}</h1>
-      <p>{result.data.bus.description}</p>
+      <h1 class="text-4xl font-bold mb-8">{data.bus.name}</h1>
+      <p>{data.bus.description}</p>
       <Map
         style={{
           width: "100%",
@@ -131,7 +111,7 @@ export default function () {
         }}
         mapStyle="https://tiles.stadiamaps.com/styles/alidade_smooth.json"
       >
-        <Route route={result.data.bus.route} />
+        <Route route={data.bus.route} />
       </Map>
     </div>
   );
