@@ -1,5 +1,5 @@
 import { client } from "@/lib/urql";
-import { Link, Params, useParams } from "@/router";
+import { Params, useParams } from "@/router";
 import { graphql } from "@/gql/gql";
 import { useQuery } from "urql";
 import { useMemo } from "preact/hooks";
@@ -92,9 +92,6 @@ export default function ShowBusPage() {
 
   return (
     <div>
-      <p class="text-2xl mb-4">
-        <Link to="/">Bike Bus</Link>
-      </p>
       <h1 class="text-4xl font-bold mb-8">{data.bus.name}</h1>
       <p>{data.bus.description}</p>
       <Map

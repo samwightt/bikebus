@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@generouted/react-router": "^1.15.9",
+    "@mapbox/togeojson": "^0.16.2",
+    "@preact/signals": "^1.2.1",
     "graphql-ws": "^5.14.1",
     "maplibre-gl": "^3.3.1",
     "preact": "^10.16.0",
