@@ -1,5 +1,0 @@
-query RootQuery {
-	buses {
-		...BusHomeDetails
-	}
-}
