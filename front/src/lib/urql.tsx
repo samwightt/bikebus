@@ -3,11 +3,11 @@ import { Client, cacheExchange, fetchExchange, Provider as UrqlProvider, subscri
 import { createClient as createWSClient } from 'graphql-ws'
 
 const wsClient = createWSClient({
-  url: 'ws://localhost:4000/graphql/subscriptions'
+  url: import.meta.env.VITE_PUBLIC_SUBSCRIPTION_URL
 })
 
 export const client = new Client({
-  url: 'http://localhost:4000/graphql',
+  url: import.meta.env.VITE_PUBLIC_GRAPHQL_URL,
   exchanges: [cacheExchange, fetchExchange, subscriptionExchange({
     forwardSubscription(request) {
       const input = { ...request, query: request.query || '' }
