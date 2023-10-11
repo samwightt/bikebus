@@ -10,8 +10,6 @@ const ShowBus = graphql(`
   query ShowBus($id: ID!) {
     bus(id: $id) {
       id
-      name
-      description
       route
     }
   }
@@ -19,7 +17,7 @@ const ShowBus = graphql(`
 
 export const Loader = ({ params }: { params: Params["/bus/:id"] }) => {
   const { id } = params;
-  return client.query(ShowBus, { id }).toPromise;
+  return client.query(ShowBus, { id }).toPromise();
 };
 
 function Route(props: { route?: string }) {
@@ -92,8 +90,6 @@ export default function ShowBusPage() {
 
   return (
     <div>
-      <h1 class="text-4xl font-bold mb-8">{data.bus.name}</h1>
-      <p>{data.bus.description}</p>
       <Map
         style={{
           width: "100%",
